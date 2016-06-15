@@ -29,10 +29,18 @@ li:after {
     clear: both;
 }
 
+.start,
 .tag,
 .level,
 .message {
     float: left;
+}
+
+.start {
+    padding-left: 20%;
+    font-size: 16pt;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .tag {
