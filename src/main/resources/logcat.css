@@ -13,16 +13,20 @@ body {
     text-shadow: rgba(0,0,0,.01) 0 0 1px;
 }
 
+a {
+    color: #42b1c2;
+    text-decoration: initial;
+    outline: 0;
+}
+
 .links-container {
     padding: 10px;
 }
 
 .link {
     display: block;
-    color: #42b1c2;
     padding-left: 20%;
     font-size: 12pt;
-    text-decoration: initial;
 }
 
 .link:first-of-type {
