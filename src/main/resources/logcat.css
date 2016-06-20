@@ -13,8 +13,25 @@ body {
     text-shadow: rgba(0,0,0,.01) 0 0 1px;
 }
 
+.links-container {
+    padding: 10px;
+}
+
+.link {
+    display: block;
+    color: #42b1c2;
+    padding-left: 20%;
+    font-size: 12pt;
+    text-decoration: initial;
+}
+
+.link:first-of-type {
+    padding-top: 10px;
+}
+
 ul {
     padding: 10px;
+    padding-top: 0;
 }
 
 li {
@@ -29,6 +46,11 @@ li:after {
     clear: both;
 }
 
+.start-container {
+    margin-top: 20px;
+    border-top: 10px solid rgba(131,148,150,.2);
+}
+
 .start,
 .tag,
 .level,
@@ -39,7 +61,7 @@ li:after {
 .start {
     padding-left: 20%;
     font-size: 16pt;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
@@ -48,7 +70,6 @@ li:after {
     overflow: hidden;
     text-align: right;
     direction: rtl;
-    text-overflow: ellipsis;
 }
 
 .level {

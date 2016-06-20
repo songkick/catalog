@@ -26,19 +26,33 @@ class LogCatPrinter {
         htmlPrintWriter.println("<link href=\"logcat.css\" media=\"all\" rel=\"stylesheet\"/>")
         htmlPrintWriter.println("</head>")
         htmlPrintWriter.println("<body>")
-        htmlPrintWriter.println("<ul>")
 
+        htmlPrintWriter.println("<div class=\"links-container\">")
         for (LogCatMessage logCatMessage : logCatMessages) {
-            txtPrintWriter.println("${logCatMessage.pid} ${logCatMessage.timestamp} -- ${logCatMessage.message}")
-
-            htmlPrintWriter.println("<li>")
             Matcher match = MESSAGE_START.matcher(logCatMessage.message)
             if (match.matches() && TEST_RUNNER.equals(logCatMessage.tag)) {
                 def testName = match.group(1)
                 def className = match.group(2)
                 def classSimpleName = className.split("\\.").last()
-                htmlPrintWriter.println("<div id=\"${className}.${testName}\" class=\"start\">${classSimpleName} > ${testName}</div>")
+                htmlPrintWriter.println("<a class=\"link\" href=\"#${className}.${testName}\">${classSimpleName} > ${testName}</a>")
+            }
+        }
+        htmlPrintWriter.println("</div>")
+
+        htmlPrintWriter.println("<ul>")
+
+        for (LogCatMessage logCatMessage : logCatMessages) {
+            txtPrintWriter.println("${logCatMessage.pid} ${logCatMessage.timestamp} -- ${logCatMessage.message}")
+
+            Matcher match = MESSAGE_START.matcher(logCatMessage.message)
+            if (match.matches() && TEST_RUNNER.equals(logCatMessage.tag)) {
+                htmlPrintWriter.println("<li class=\"start-container\">")
+                def testName = match.group(1)
+                def className = match.group(2)
+                def classSimpleName = className.split("\\.").last()
+                htmlPrintWriter.println("<a href=\"#${className}.${testName}\" id=\"${className}.${testName}\" class=\"start\">${classSimpleName} > ${testName}</a>")
             } else {
+                htmlPrintWriter.println("<li>")
                 def tagColor = stringToRGB(logCatMessage.tag)
                 htmlPrintWriter.println("<div class=\"tag\" style=\"color:${tagColor};\">${logCatMessage.tag}</div>")
                 htmlPrintWriter.println("<div class=\"level ${logCatMessage.logLevel.stringValue.toLowerCase(Locale.ROOT)}\">${logCatMessage.logLevel.stringValue[0].toUpperCase(Locale.ROOT)}</div>")
