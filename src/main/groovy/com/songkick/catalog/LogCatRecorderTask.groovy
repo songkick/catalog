@@ -8,6 +8,9 @@ import org.gradle.api.tasks.TaskAction
 
 class LogCatRecorderTask extends DefaultTask implements AndroidDebugBridge.IDeviceChangeListener {
 
+    private static final int MAX_INIT_ATTEMPTS = 100
+    private static final int WAIT_BEFORE_NEXT_INIT_ATTEMPT_MS = 50
+
     @InputFile
     File adbExe
 
@@ -29,9 +32,11 @@ class LogCatRecorderTask extends DefaultTask implements AndroidDebugBridge.IDevi
         if (adb.hasInitialDeviceList()) {
             runLogCat()
         } else {
-            while (!adb.hasInitialDeviceList()) {
-                Thread.sleep(50)
+            int attempts = 0
+            while (!adb.hasInitialDeviceList() && attempts < MAX_INIT_ATTEMPTS) {
+                Thread.sleep(WAIT_BEFORE_NEXT_INIT_ATTEMPT_MS)
                 runLogCat()
+                attempts ++
             }
         }
     }
