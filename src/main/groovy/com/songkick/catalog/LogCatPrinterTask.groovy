@@ -1,5 +1,6 @@
 package com.songkick.catalog
 import com.android.ddmlib.AndroidDebugBridge
+import org.apache.commons.io.IOUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
@@ -19,6 +20,12 @@ class LogCatPrinterTask extends DefaultTask {
         devices.each { device ->
             device.task.stop()
             device.task.removeLogCatListener(device.recorder)
+
+            def cssInStream = getClass().getClassLoader().getResourceAsStream('logcat.css')
+            def cssOutStream = new File(outputDir.absolutePath, 'logcat.css').newOutputStream()
+            IOUtils.copy(cssInStream, cssOutStream)
+            cssInStream.close();
+            cssOutStream.close();
 
             def txtFileName = "logcat-${device.name.replace(' ', '_')}.txt"
             def txtFile = new File(outputDir.absolutePath, txtFileName)
