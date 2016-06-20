@@ -1,7 +1,7 @@
 # Catalog
 
 Catalog is a gradle plugin for Android that records logs when running Espresso tests.
-It will run with `connected{Veriant}AndroidTest` and generate a report in `app/build/outputs/androidTest-results/`:
+It will run automatically with `connected{Variant}AndroidTest` tasks and print the LogCat into `app/build/outputs/androidTest-results/`:
 ![](screenshot.png)
 
 To include it in your project:
