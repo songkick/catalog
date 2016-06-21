@@ -25,7 +25,7 @@ publish {
     userOrg = 'songkick'
     groupId = 'com.songkick'
     artifactId = 'catalog'
-    version = '0.1.0'
+    version = '0.2.0-SNAPSHOT'
     description = 'A gradle plugin for Android that records logs when running UI tests'
     website = 'https://github.com/Songkick/catalog'
     uploadName = 'Catalog'
