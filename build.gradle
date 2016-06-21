@@ -27,6 +27,6 @@ publish {
     artifactId = 'catalog'
     version = '0.1'
     description = 'A gradle plugin for Android that records logs when running UI tests'
-    website = 'https://github.com/CrowdSurge/catalog'
+    website = 'https://github.com/Songkick/catalog'
     uploadName = 'Catalog'
 }
