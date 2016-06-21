@@ -1,27 +1,31 @@
-## Catalog is an **OPEN Open Source Projects**
-(borrowed from the excellent [node-levelup CONTRIBUTING.md](https://github.com/Level/community/blob/master/CONTRIBUTING.md)
------------------------------------------
+# Contributing
 
-## What?
+We love pull requests from everyone.
 
-Individuals making significant and valuable contributions are given commit-access to a project to contribute as they see fit. A project is more like an open wiki than a standard guarded open source project.
+Fork, then clone the repo:
+    git clone git@github.com:your-username/catalog.git
 
-## Rules
+Set up your machine:
+    ./bin/setup
 
-There are a few basic ground-rules for contributors:
+Make sure the tests pass:
+    rake
 
-1. **No `--force` pushes** or modifying the Git history in any way.
-1. **Non-master branches** ought to be used for ongoing work.
-1. **External API changes and significant modifications** ought to be subject to an **internal pull-request** to solicit feedback from other contributors.
-1. Internal pull-requests to solicit feedback are *encouraged* for any other non-trivial contribution but left to the discretion of the contributor.
-1. Contributors should attempt to adhere to the prevailing code-style.
+Make your change. Add tests for your change. Make the tests pass:
+    rake
 
-## Releases
+Push to your fork and [submit a pull request][pr].
 
-Declaring formal releases remains the prerogative of the project maintainer(s).
+[pr]: https://github.com/songkick/catalog/compare/
 
-## Changes to this arrangement
+At this point you're waiting on us. We like to at least comment on pull requests
+within three business days (and, typically, one business day). We may suggest
+some changes or improvements or alternatives.
 
-This is an experiment and feedback is welcome! This document may also be subject to pull-requests or changes by contributors where you believe you have something valuable to add or change.
+Some things that will increase the chance that your pull request is accepted:
 
------------------------------------------
+* Write tests.
+* Follow our [style guide][style].
+* Write a [good commit message][commit].
+
+[commit]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
