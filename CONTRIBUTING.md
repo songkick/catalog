@@ -3,16 +3,19 @@
 We love pull requests from everyone.
 
 Fork, then clone the repo:
-    git clone git@github.com:your-username/catalog.git
-
-Set up your machine:
-    ./bin/setup
+```
+git clone git@github.com:your-username/catalog.git
+```
 
 Make sure the tests pass:
-    rake
+```
+./gradlew test
+```
 
 Make your change. Add tests for your change. Make the tests pass:
-    rake
+```
+./gradlew test
+```
 
 Push to your fork and [submit a pull request][pr].
 
