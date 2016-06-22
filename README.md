@@ -12,7 +12,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.songkick:catalog:0.1.0'
+        classpath 'com.songkick:catalog:0.1.1'
     }
 }
 
