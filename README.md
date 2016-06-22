@@ -20,6 +20,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.songkick.catalog'
 ```
 
+## Release
+
+To release:
+```
+./gradlew clean build bintrayUpload -PbintrayUser=USERNAME -PbintrayKey=API_KEY -PdryRun=false
+```
+
 ## License
 
 ```
