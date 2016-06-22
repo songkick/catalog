@@ -33,8 +33,10 @@ class LogCatRecorderTest {
 
         recorder.log(messages)
 
-        def recordedMessages = recorder.recordedMessages
+        def recordedMessages = recorder.records.messages
+        def starters = recorder.records.starters
         assertThat(recordedMessages).isEmpty()
+        assertThat(starters.size()).isEqualTo(0)
     }
 
     @Test
@@ -45,7 +47,7 @@ class LogCatRecorderTest {
 
         recorder.log(messages)
 
-        def recordedMessages = recorder.recordedMessages
+        def recordedMessages = recorder.records.messages
         assertThat(recordedMessages).containsExactly(start, message)
     }
 
@@ -57,7 +59,7 @@ class LogCatRecorderTest {
 
         recorder.log(messages)
 
-        def recordedMessages = recorder.recordedMessages
+        def recordedMessages = recorder.records.messages
         assertThat(recordedMessages).containsExactly(start)
     }
 
@@ -70,7 +72,40 @@ class LogCatRecorderTest {
 
         recorder.log(messages)
 
-        def recordedMessages = recorder.recordedMessages
+        def recordedMessages = recorder.records.messages
         assertThat(recordedMessages).containsExactly(startTestPid2)
+    }
+
+    @Test
+    public void log_shouldRecordOneStarter() {
+        def message = newMessage("TestRunner", "started: dumbTest(com.example.romainpiel.myapplication.MainActivityTest)")
+        List<LogCatMessage> messages = Lists.newArrayList(message)
+
+        recorder.log(messages)
+
+        def starters = recorder.records.starters
+        assertThat(starters.size()).isEqualTo(1)
+        def starter = starters.get(0)
+        assertThat(starter.className).isEqualTo("com.example.romainpiel.myapplication.MainActivityTest")
+        assertThat(starter.testName).isEqualTo("dumbTest")
+    }
+
+    @Test
+    public void log_shouldRecordTwoStarters() {
+        def startTest1 = newMessage("TestRunner", "started: dumbTest(com.example.romainpiel.myapplication.MainActivityTest)")
+        def endTest1 = newMessage("TestRunner", "finished: dumbTest(com.example.romainpiel.myapplication.MainActivityTest)")
+        def startTest2 = newMessage("TestRunner", "started: anotherTest(com.example.romainpiel.myapplication.MainActivityTest)")
+        List<LogCatMessage> messages = Lists.newArrayList(startTest1, endTest1, startTest2)
+
+        recorder.log(messages)
+
+        def starters = recorder.records.starters
+        assertThat(starters.size()).isEqualTo(2)
+        def starter1 = starters.get(0)
+        assertThat(starter1.className).isEqualTo("com.example.romainpiel.myapplication.MainActivityTest")
+        assertThat(starter1.testName).isEqualTo("dumbTest")
+        def starter2 = starters.get(2)
+        assertThat(starter2.className).isEqualTo("com.example.romainpiel.myapplication.MainActivityTest")
+        assertThat(starter2.testName).isEqualTo("anotherTest")
     }
 }

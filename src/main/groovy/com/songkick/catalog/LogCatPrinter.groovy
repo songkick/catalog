@@ -1,13 +1,9 @@
 package com.songkick.catalog
 import com.android.ddmlib.logcat.LogCatMessage
 
-import java.awt.Color
-import java.util.regex.Matcher
-import java.util.regex.Pattern
+import java.awt.*
 
 class LogCatPrinter {
-    private static final String TEST_RUNNER = "TestRunner"
-    private static final Pattern MESSAGE_START = Pattern.compile("started: ([^(]+)\\(([^)]+)\\)")
 
     private PrintWriter txtPrintWriter
     private PrintWriter htmlPrintWriter
@@ -19,7 +15,7 @@ class LogCatPrinter {
         this.colorCache = new HashMap<>()
     }
 
-    void print(List<LogCatMessage> logCatMessages) {
+    void print(Records records) {
         htmlPrintWriter.println("<!DOCTYPE html>")
         htmlPrintWriter.println("<html lang=\"en\">")
         htmlPrintWriter.println("<head>")
@@ -28,29 +24,23 @@ class LogCatPrinter {
         htmlPrintWriter.println("<body>")
 
         htmlPrintWriter.println("<div class=\"links-container\">")
-        for (LogCatMessage logCatMessage : logCatMessages) {
-            Matcher match = MESSAGE_START.matcher(logCatMessage.message)
-            if (match.matches() && TEST_RUNNER.equals(logCatMessage.tag)) {
-                def testName = match.group(1)
-                def className = match.group(2)
-                def classSimpleName = className.split("\\.").last()
-                htmlPrintWriter.println("<a class=\"link\" href=\"#${className}.${testName}\">${classSimpleName} > ${testName}</a>")
-            }
+        for (int i = 0; i < records.starters.size(); i++) {
+            def starter = records.starters.valueAt(i)
+            def classSimpleName = starter.className.split("\\.").last()
+            htmlPrintWriter.println("<a class=\"link\" href=\"#${starter.className}.${starter.testName}\">${classSimpleName} > ${starter.testName}</a>")
         }
         htmlPrintWriter.println("</div>")
 
         htmlPrintWriter.println("<ul>")
 
-        for (LogCatMessage logCatMessage : logCatMessages) {
+        records.messages.eachWithIndex { LogCatMessage logCatMessage, i ->
             txtPrintWriter.println("${logCatMessage.pid} ${logCatMessage.timestamp} -- ${logCatMessage.message}")
 
-            Matcher match = MESSAGE_START.matcher(logCatMessage.message)
-            if (match.matches() && TEST_RUNNER.equals(logCatMessage.tag)) {
+            if (records.starters.get(i) != null) {
                 htmlPrintWriter.println("<li class=\"start-container\">")
-                def testName = match.group(1)
-                def className = match.group(2)
-                def classSimpleName = className.split("\\.").last()
-                htmlPrintWriter.println("<a href=\"#${className}.${testName}\" id=\"${className}.${testName}\" class=\"start\">${classSimpleName} > ${testName}</a>")
+                def starter = records.starters.get(i)
+                def classSimpleName = starter.className.split("\\.").last()
+                htmlPrintWriter.println("<a href=\"#${starter.className}.${starter.testName}\" id=\"${starter.className}.${starter.testName}\" class=\"start\">${classSimpleName} > ${starter.testName}</a>")
             } else {
                 htmlPrintWriter.println("<li>")
                 def tagColor = stringToRGB(logCatMessage.tag)

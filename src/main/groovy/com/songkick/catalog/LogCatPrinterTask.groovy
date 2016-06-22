@@ -32,7 +32,7 @@ class LogCatPrinterTask extends DefaultTask {
             def htmlFileName = "logcat-${device.name.replace(' ', '_')}.html"
             def htmlFile = new File(outputDir.absolutePath, htmlFileName)
             LogCatPrinter printer = new LogCatPrinter(txtFile, htmlFile)
-            printer.print(device.recorder.recordedMessages)
+            printer.print(device.recorder.records)
         }
         devices.clear()
 

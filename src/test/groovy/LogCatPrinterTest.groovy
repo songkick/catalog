@@ -1,8 +1,11 @@
 import com.android.ddmlib.Log
 import com.android.ddmlib.logcat.LogCatMessage
 import com.android.ddmlib.logcat.LogCatTimestamp
+import com.android.utils.SparseArray
 import com.google.common.collect.Lists
 import com.songkick.catalog.LogCatPrinter
+import com.songkick.catalog.Records
+import com.songkick.catalog.Starter
 import org.joda.time.DateTime
 import org.junit.Before
 import org.junit.Rule
@@ -34,9 +37,9 @@ class LogCatPrinterTest {
 
     @Test
     public void print_emptyList_shouldNotPrintAnything() throws Exception {
-        def list = new ArrayList();
+        def records = new Records(new ArrayList<LogCatMessage>(), new SparseArray<Starter>())
 
-        printer.print(list)
+        printer.print(records)
 
         assertThat(txtFile.text).isEmpty()
         assertThat(htmlFile.text).isEqualTo('<!DOCTYPE html>\n' +
@@ -56,9 +59,12 @@ class LogCatPrinterTest {
     @Test
     public void print_starter_shouldPrintHeader() {
         def startMessage = newMessage("TestRunner", "started: dumbTest(com.example.romainpiel.myapplication.MainActivityTest)")
-        def list = Lists.newArrayList(startMessage)
+        def messages = Lists.newArrayList(startMessage)
+        def starters = new SparseArray()
+        starters.put(0, new Starter("com.example.romainpiel.myapplication.MainActivityTest", "dumbTest"))
+        def records = new Records(messages, starters)
 
-        printer.print(list)
+        printer.print(records)
 
         assertThat(txtFile.text).contains("-- started: dumbTest(com.example.romainpiel.myapplication.MainActivityTest)\n")
         assertThat(htmlFile.text).isEqualTo('<!DOCTYPE html>\n' +
@@ -81,10 +87,12 @@ class LogCatPrinterTest {
 
     @Test
     public void print_nonStarter_shouldPrintLine() {
-        def startMessage = newMessage("Cupcake", "I'm the sweetest!")
-        def list = Lists.newArrayList(startMessage)
+        def message = newMessage("Cupcake", "I'm the sweetest!")
+        def messages = Lists.newArrayList(message)
+        def starters = new SparseArray()
+        def records = new Records(messages, starters)
 
-        printer.print(list)
+        printer.print(records)
 
         assertThat(txtFile.text).contains("-- I'm the sweetest!\n")
         assertThat(htmlFile.text).isEqualTo('<!DOCTYPE html>\n' +
