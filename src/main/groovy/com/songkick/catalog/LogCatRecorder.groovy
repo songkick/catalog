@@ -26,7 +26,7 @@ class LogCatRecorder implements LogCatListener {
 
     @Override
     void log(List<LogCatMessage> logCatMessages) {
-         logCatMessages.each { LogCatMessage logCatMessage ->
+        logCatMessages.each { LogCatMessage logCatMessage ->
             if (pid == -1) {
                 Matcher match = MESSAGE_START.matcher(logCatMessage.message)
                 if (match.matches() && TEST_RUNNER.equals(logCatMessage.tag)) {

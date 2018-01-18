@@ -7,12 +7,17 @@ import org.gradle.api.Project
 
 
 class CatalogPlugin implements Plugin<Project> {
+
+    private static def adbBridge = new AdbBridgeManager();
+
     @Override
     void apply(Project project) {
         if (project != null && project.plugins.hasPlugin('com.android.application')) {
             applyAndroidProject(project, (DomainObjectCollection<BaseVariant>) project.android.applicationVariants)
         } else if (project != null && project.plugins.hasPlugin('com.android.library')) {
             applyAndroidProject(project, (DomainObjectCollection<BaseVariant>) project.android.libraryVariants)
+        } else if (project != null && project.plugins.hasPlugin('com.android.test')) {
+            applyAndroidProject(project, (DomainObjectCollection<BaseVariant>) project.android.applicationVariants)
         } else {
             throw new UnsupportedOperationException('Catalog plugin Plugin requires the Android Application or Library plugin to be configured')
         }
@@ -24,18 +29,18 @@ class CatalogPlugin implements Plugin<Project> {
             def connectedTask = project.tasks.findByName("connected${slug}AndroidTest")
 
             if (connectedTask) {
-                def recorderTask = project.tasks.create("recordConnected${slug}AndroidTest", LogCatRecorderTask)
-                recorderTask.group = 'Verification'
-                recorderTask.description = "Record logcat for ${variant.name} variant."
-                recorderTask.adbExe = project.android.adbExe
-
+                adbBridge.initializeAdbExe(project.android.adbExe)
+                def recorderGroup = adbBridge.createRecorderGroup()
                 def printerTask = project.tasks.create("printConnected${slug}AndroidTest", LogCatPrinterTask)
+                printerTask.logCatRecorderGroup = recorderGroup
                 printerTask.group = 'Verification'
-                recorderTask.description = "Print logcat for ${variant.name} variant."
-                printerTask.devices = recorderTask.devices
+                printerTask.description = "Print logcat for ${variant.name} variant."
                 printerTask.outputDir = project.file("$project.buildDir/outputs/androidTest-results")
+                printerTask.dependsOn connectedTask
 
-                connectedTask.dependsOn recorderTask
+                connectedTask.doFirst {
+                    recorderGroup.attach()
+                }
                 connectedTask.finalizedBy printerTask
             }
         }
